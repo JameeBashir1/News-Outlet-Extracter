@@ -16,6 +16,7 @@
 # To Run Locally 
 ## Step 1 Clone the Repository
 `https://github.com/JameeBashir1/News-Outlet-Scraper`
+cd News-Outlet-Scraper
 ## Step 2 Install Requirements
 `pip install -r requirements.txt`
 ## Step 3 Update the UserName and Password in Yaml File
