@@ -52,9 +52,6 @@ def scrape_articles():
     chrome_options.add_argument("--no-sandbox")  # Needed for some environments like Codespaces
     chrome_options.add_argument("--disable-dev-shm-usage")  # Required for running in Docker containers
 
-    # Path to ChromeDriver (default path on Linux)
-    # service = Service('/usr/bin/chromedriver')
-
     # Initialize WebDriver
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
