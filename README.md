@@ -1,4 +1,4 @@
-Steps to Run: 
+Steps to Follow: 
 
 # Run Below Commands to Setup:
 1. sudo apt update
