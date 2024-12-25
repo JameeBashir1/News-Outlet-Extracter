@@ -11,7 +11,7 @@
 ## Step 2 Update the UserName and Password in Yaml File
 `userName: jameebashir_ncy6hC'
 `accessKey: LmQ2BVMHePvSQVy5sxYi`
-# Step3 To Run the Tests on BrowserStack using the Pytest SDK
+# Step 3 To Run the Tests on BrowserStack using the Pytest SDK
 `browserstack-sdk python NewsOutletScrapper.py`
 # To Run Locally 
 ## Step 1 Clone the Repository
@@ -25,3 +25,5 @@
 `python NewsOutletScrapper.py`
 or
 `python3 NewsOutletScrapper.py`
+# Step 5 To Run the Tests on BrowserStack using the Pytest SDK
+`browserstack-sdk python NewsOutletScrapper.py`
