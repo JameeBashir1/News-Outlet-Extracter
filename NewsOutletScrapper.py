@@ -11,6 +11,8 @@ import pytz
 import os
 import requests
 from collections import Counter
+from webdriver_manager.chrome import ChromeDriverManager
+import html
 
 # Load environment variables from .env
 load_dotenv()
@@ -21,30 +23,40 @@ TRANSLATE_URL = "https://translation.googleapis.com/language/translate/v2"
 
 # Function to translate text using Google Translate API
 def translate_text(text, target_language="en"):
+    # First decode any HTML entities before translating
+    decoded_text = html.unescape(text)
+    
     params = {
-        "q": text,
+        "q": decoded_text,
         "target": target_language,
         "key": API_KEY
     }
     response = requests.post(TRANSLATE_URL, params=params)
     if response.status_code == 200:
-        return response.json()["data"]["translations"][0]["translatedText"]
+        translated = response.json()["data"]["translations"][0]["translatedText"]
+        
+        # Decode any HTML entities in the translated text as well
+        return html.unescape(translated)
     else:
         print(f"Translation API Error: {response.json()}")
-        return text
+        return decoded_text
+
 
 # Function to scrape articles from EL PAIS and save details
 def scrape_articles():
-    # Set Chrome options to disable the automation banner
+    # Set Chrome options to disable the automation banner and run in headless mode
     chrome_options = Options()
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_experimental_option("useAutomationExtension", False)
+    chrome_options.add_argument("--headless")  # Run in headless mode
+    chrome_options.add_argument("--no-sandbox")  # Needed for some environments like Codespaces
+    chrome_options.add_argument("--disable-dev-shm-usage")  # Required for running in Docker containers
 
-    # Path to ChromeDriver
-    service = Service('C:\\Driver\\chromedriver.exe')
+    # Path to ChromeDriver (default path on Linux)
+    # service = Service('/usr/bin/chromedriver')
 
     # Initialize WebDriver
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
     # Open the Opinion page
     driver.get("https://elpais.com/opinion/")
@@ -75,10 +87,12 @@ def scrape_articles():
 
             # Process the top 5 articles
             for article in top_5_articles:
-                header = article.find_element(By.TAG_NAME, 'h2').text if article.find_element(By.TAG_NAME, 'header') else 'No header'
+                # Use innerText to extract all nested text from the header
+                header = article.find_element(By.TAG_NAME, 'h2').get_attribute('innerText') if article.find_element(By.TAG_NAME, 'header') else 'No header'
                 translated_header = translate_text(header)  # Translate the header
-                paragraph = article.find_element(By.TAG_NAME, 'p').text if article.find_element(By.TAG_NAME, 'p') else 'No paragraph'
+                paragraph = article.find_element(By.TAG_NAME, 'p').get_attribute('innerText') if article.find_element(By.TAG_NAME, 'p') else 'No paragraph'
 
+                # Handle figure/image extraction
                 figure = article.find_element(By.TAG_NAME, 'figure') if article.find_elements(By.TAG_NAME, 'figure') else None
                 figure_content = 'No Image Available for this Article'
 
@@ -97,10 +111,11 @@ def scrape_articles():
                             img_data = requests.get(img_url).content
                             with open(image_path, 'wb') as img_file:
                                 img_file.write(img_data)
-                            figure_content += f" Image saved at {image_path}"
+                            figure_content += f"\nImage saved at {image_path}"
                         except Exception as e:
-                            figure_content += f" Failed to download image: {e}"
+                            figure_content += f"\nFailed to download image: {e}"
 
+                # Write article details to the file
                 file.write(f"Article {i}:\n")
                 file.write(f"Original Title: {header}\n")
                 file.write(f"Translated Title: {translated_header}\n")

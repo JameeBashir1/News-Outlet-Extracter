@@ -7,20 +7,20 @@ Content: El discurso del Rey homenajea a los afectados por la dana, reclama un a
 Image: No Image Available for this Article
 
 Article 2:
-Original Title: El año de Sánchez
-Translated Title: The year of Sanchez
-Content: La buena marcha de la Economía compite en España con el ruido político generado por la oposición desde el comienzo de la legislatura
+Original Title: 
+Translated Title: 
+Content: 
 Image: No Image Available for this Article
 
 Article 3:
-Original Title: Lo admito, la Tierra es esférica
-Translated Title: I admit it, the Earth is spherical
-Content: No es buena idea confundir la coherencia con la cabezonería, y no hace falta viajar a la Antártida para comprobar que el planeta no es un disco
+Original Title: 
+Translated Title: 
+Content: 
 Image: No Image Available for this Article
 
 Article 4:
-Original Title: El gobierno de los millonarios
-Translated Title: The government of millionaires
+Original Title: 
+Translated Title: 
 Content: 
 Image: Image URL: https://imagenes.elpais.com/resizer/v2/Q6XAOHWGGVFCHLHSJOVDLAA7SE.jpg?auth=f797c1d7b9c03879f5d11801a8041ab216bea9abefd0a45916e302224ff464d0&width=414 Image saved at downloaded_images\article_4_image.jpg
 
@@ -32,4 +32,4 @@ Image: Image URL: https://imagenes.elpais.com/resizer/v2/MENB7YWVLREHXBY4LBVNWZI
 
 
 Repeated Words in Translated Headers:
-the: 5
+No repeated words found.
