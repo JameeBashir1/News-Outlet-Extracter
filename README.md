@@ -9,8 +9,8 @@
 6. pip3 install -r requirements.txt
 7. python NewsOutletScrapper.py
 ## Step 2 Update the UserName and Password in Yaml File
-`userName: jameebashir_ncy6hC'
-`accessKey: LmQ2BVMHePvSQVy5sxYi`
+`userName: YOUR_USERNAME'
+`accessKey: YOUR_ACCESS_KEY`
 ## Step 3 To Run the Tests on BrowserStack using the Pytest SDK
 `browserstack-sdk python NewsOutletScrapper.py`
 # To Run Locally 
