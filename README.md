@@ -1,44 +1,30 @@
-Steps to Run: 
+# To Run Directly in Github CodeSpace
 
-# Run Below Commands to Setup:
+## Step 1 Run Below Commands to Setup in Github CodeSpace:
 1. sudo apt update
 2. sudo apt upgrade -y
 3. wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 4. sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
-5. pip3 install selenium webdriver-manager
-
-# PyTest with Browserstack
-
-PyTest Integration with BrowserStack using SDK.
-
-![BrowserStack Logo](https://d98b8t1nnulk5.cloudfront.net/production/images/layout/logo-header.png?1469004780)
-## Prerequisite
-* Python3
-
-## Setup
-
-* Clone the repo with `git clone -b sdk https://github.com/browserstack/pytest-browserstack.git`
-* It is recommended to use a virtual environment to install dependencies. To create a virtual environment:
-  ```
-  python3 -m venv env
-  source env/bin/activate # on Mac
-  env\Scripts\activate # on Windows
-  ```
-* Install dependencies `pip install -r requirements.txt`
-* To run your automated tests using BrowserStack, you must provide a valid username and access key. This can be done either by providing your username and access key in the `browserstack.yml` configuration file, or by setting the `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` environment variables.
-
-## Run sample test in parallel:
-* To run the sample test across platforms defined in the configuration file run:
-```
-  browserstack-sdk pytest -s tests/bstack-sample-test.py
-```
-
-## Run a sample local test:
-* To run the sample local test across platforms defined in the configuration file, you just need to set `browserstackLocal` key as true in the `browserstack.yml` file and run:
-```
-  browserstack-sdk pytest -s tests/bstack-local-test.py
-```
-
-## Notes
-* You can view your test results on the [BrowserStack Automate dashboard](https://www.browserstack.com/automate)
-* To test on a different set of browsers, check out our [platform configurator](https://www.browserstack.com/automate/python#setting-os-and-browser)
+5. rm -rf google-chrome-stable_current_amd64.deb
+6. pip3 install -r requirements.txt
+7. python NewsOutletScrapper.py
+## Step 2 Update the UserName and Password in Yaml File
+`userName: YOUR_USERNAME'
+`accessKey: YOUR_ACCESS_KEY`
+## Step 3 To Run the Tests on BrowserStack using the Pytest SDK
+`browserstack-sdk python NewsOutletScrapper.py`
+# To Run Locally 
+## Step 1 Clone the Repository
+`https://github.com/JameeBashir1/News-Outlet-Scraper`
+cd News-Outlet-Scraper
+## Step 2 Install Requirements
+`pip install -r requirements.txt`
+## Step 3 Update the UserName and Password in Yaml File
+`userName: jameebashir_ncy6hC'
+`accessKey: LmQ2BVMHePvSQVy5sxYi`
+## Step 4 To test locally
+`python NewsOutletScrapper.py`
+or
+`python3 NewsOutletScrapper.py`
+## Step 5 To Run the Tests on BrowserStack using the Pytest SDK
+`browserstack-sdk python NewsOutletScrapper.py`
