@@ -11,7 +11,7 @@ jobs:
         with:
           username:  ${{ secrets.BROWSERSTACK_USERNAME }}
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-          build-name: 'my-test-0'
+          # build-name: 'my-test-0'
           project-name: 'My Test'
       - name: 'Checkout Code'
         uses: actions/checkout@v3
