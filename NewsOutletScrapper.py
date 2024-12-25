@@ -1,4 +1,3 @@
-from time import sleep
 from dotenv import load_dotenv
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -141,7 +140,6 @@ driver.quit()
 
 # After scraping, read the file and print its contents
 with open(file_path, 'r', encoding='utf-8') as file:
-    file_content = file.read()
     analyze_repeated_words("article_details.txt")
     # Print the updated file content
     with open(file_path, 'r', encoding='utf-8') as file:
