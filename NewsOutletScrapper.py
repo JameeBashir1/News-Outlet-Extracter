@@ -13,6 +13,7 @@ import requests
 from collections import Counter
 from webdriver_manager.chrome import ChromeDriverManager
 import html
+from time import sleep
 
 # Load environment variables from .env
 load_dotenv()
@@ -61,66 +62,92 @@ def scrape_articles():
     # Prepare the file to save article details
     file_path = "article_details.txt"
     with open(file_path, 'w', encoding='utf-8') as file:
-        try:
-            # Wait for the body to load and locate the main content section
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
-            body = driver.find_element(By.TAG_NAME, 'body')
-            main_content = body.find_element(By.CSS_SELECTOR, 'main.mw.mw-mc')
+        # try:
+        # Wait for the body to load and locate the main content section
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
+        body = driver.find_element(By.TAG_NAME, 'body')
+        main_content = body.find_element(By.CSS_SELECTOR, 'main.mw.mw-mc')
 
-            # Locate <article> elements inside the main content
-            articles = WebDriverWait(main_content, 10).until(
-                EC.presence_of_all_elements_located((By.TAG_NAME, 'article'))
+        # Locate <article> elements inside the main content
+        articles = WebDriverWait(main_content, 10).until(
+            EC.presence_of_all_elements_located((By.TAG_NAME, 'article'))
+        )
+
+        # Get the top 5 articles
+        top_5_articles = articles[:4]
+
+        i = 1
+        # Define the Madrid timezone
+        madrid_tz = pytz.timezone('Europe/Madrid')
+        madrid_current_date = datetime.now(madrid_tz).date()
+
+        file.write(f'Top 5 Articles from EL PAIS: {madrid_current_date}\n\n')
+
+        my_data = []
+
+        # Process the top 5 articles
+        for article in top_5_articles:
+            # Use innerText to extract all nested text from the header
+            header = article.find_element(By.TAG_NAME, 'h2').get_attribute('innerText') if article.find_element(By.TAG_NAME, 'header') else 'No header'
+            translated_header = translate_text(header)  # Translate the header
+            paragraph = article.find_element(By.TAG_NAME, 'p').get_attribute('innerText') if article.find_element(By.TAG_NAME, 'p') else 'No paragraph'
+
+            # Handle figure/image extraction
+            figure = article.find_element(By.TAG_NAME, 'figure') if article.find_elements(By.TAG_NAME, 'figure') else None
+            figure_content = 'No Image Available for this Article'
+
+            if figure:
+                img = figure.find_element(By.TAG_NAME, 'img') if figure.find_elements(By.TAG_NAME, 'img') else None
+                if img:
+                    img_url = img.get_attribute('src')
+                    figure_content = f"Image URL: {img_url}"
+                    image_name = f"article_{i}_image.jpg"
+                    image_path = os.path.join('downloaded_images', image_name)
+
+                    if not os.path.exists('downloaded_images'):
+                        os.makedirs('downloaded_images')
+
+                    try:
+                        img_data = requests.get(img_url).content
+                        with open(image_path, 'wb') as img_file:
+                            img_file.write(img_data)
+                        figure_content += f"\nImage saved at {image_path}"
+                    except Exception as e:
+                        figure_content += f"\nFailed to download image: {e}"
+
+            link = article.find_element(By.CSS_SELECTOR, "h2 a").get_attribute("href")
+
+            # Write article details to the file
+            my_data.append([i, header, translated_header, figure_content, link])
+            # file.write(f"Article {i}:\n")
+            # file.write(f"Original Title: {header}\n")
+            # file.write(f"Translated Title: {translated_header}\n")
+            # file.write(f"Content: {paragraph}\n")
+            # file.write(f"Image: {figure_content}\n\n")
+            i += 1
+        
+        for data in my_data:
+            link = data[4]
+            driver.get(link)
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "article"))
             )
+            content_element = driver.find_element(By.CSS_SELECTOR, '[data-dtm-region="articulo_cuerpo"]')
+            paragraph = content_element.get_attribute('innerText')
+            i = data[0]
+            my_data[i-1].append(paragraph)
 
-            # Get the top 5 articles
-            top_5_articles = articles[:5]
+            file.write(f"Article {data[0]}:\n")
+            file.write(f"Original Title: {data[1]}\n")
+            file.write(f"Translated Title: {data[2]}\n")
+            file.write(f"Content: {data[5]}\n")
+            file.write(f"Image: {data[3]}\n\n")
 
-            i = 1
-            # Define the Madrid timezone
-            madrid_tz = pytz.timezone('Europe/Madrid')
-            madrid_current_date = datetime.now(madrid_tz).date()
 
-            file.write(f'Top 5 Articles from EL PAIS: {madrid_current_date}\n\n')
 
-            # Process the top 5 articles
-            for article in top_5_articles:
-                # Use innerText to extract all nested text from the header
-                header = article.find_element(By.TAG_NAME, 'h2').get_attribute('innerText') if article.find_element(By.TAG_NAME, 'header') else 'No header'
-                translated_header = translate_text(header)  # Translate the header
-                paragraph = article.find_element(By.TAG_NAME, 'p').get_attribute('innerText') if article.find_element(By.TAG_NAME, 'p') else 'No paragraph'
 
-                # Handle figure/image extraction
-                figure = article.find_element(By.TAG_NAME, 'figure') if article.find_elements(By.TAG_NAME, 'figure') else None
-                figure_content = 'No Image Available for this Article'
-
-                if figure:
-                    img = figure.find_element(By.TAG_NAME, 'img') if figure.find_elements(By.TAG_NAME, 'img') else None
-                    if img:
-                        img_url = img.get_attribute('src')
-                        figure_content = f"Image URL: {img_url}"
-                        image_name = f"article_{i}_image.jpg"
-                        image_path = os.path.join('downloaded_images', image_name)
-
-                        if not os.path.exists('downloaded_images'):
-                            os.makedirs('downloaded_images')
-
-                        try:
-                            img_data = requests.get(img_url).content
-                            with open(image_path, 'wb') as img_file:
-                                img_file.write(img_data)
-                            figure_content += f"\nImage saved at {image_path}"
-                        except Exception as e:
-                            figure_content += f"\nFailed to download image: {e}"
-
-                # Write article details to the file
-                file.write(f"Article {i}:\n")
-                file.write(f"Original Title: {header}\n")
-                file.write(f"Translated Title: {translated_header}\n")
-                file.write(f"Content: {paragraph}\n")
-                file.write(f"Image: {figure_content}\n\n")
-                i += 1
-        except Exception as e:
-            print(f"An error occurred while scraping articles: {e}")
+        # except Exception as e:
+        #     print(f"An error occurred while scraping articles: {e}") 
 
     # Close the browser
     driver.quit()

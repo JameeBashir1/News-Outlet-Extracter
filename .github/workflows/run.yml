@@ -1,0 +1,21 @@
+name: 'BrowserStack Test'
+on: [push, workflow_dispatch]
+
+jobs:
+  ubuntu-job:
+    name: 'BrowserStack Test on Ubuntu'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'BrowserStack Env Setup'
+        uses: 'browserstack/github-actions/setup-env@master'
+        with:
+          username:  ${{ secrets.BROWSERSTACK_USERNAME }}
+          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          build-name: 'my-test-0'
+          project-name: 'My Test'
+      - name: 'Checkout Code'
+        uses: actions/checkout@v3
+      - name: 'Python Install Requirements'
+        run: pip3 install -r requirements.txt
+      - name: 'Python Start BrowserStack Test'
+        run: browserstack-sdk python NewsOutletScrapper.py.py
