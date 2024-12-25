@@ -7,4 +7,5 @@ Steps to Follow:
 4. sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
 5. pip3 install selenium webdriver-manager
 # To Run the Tests on BrowserStack using the Pytest SDK
-browserstack-sdk python NewsOutletScrapper.py
+`browserstack-sdk python NewsOutletScrapper.py
+`
