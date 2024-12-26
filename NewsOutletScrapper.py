@@ -14,6 +14,7 @@ from collections import Counter
 from webdriver_manager.chrome import ChromeDriverManager
 import html
 from time import sleep
+import json
 
 # Load environment variables from .env
 load_dotenv()
@@ -148,6 +149,14 @@ def scrape_articles():
 
         # except Exception as e:
         #     print(f"An error occurred while scraping articles: {e}") 
+    executor_object = {
+        'action': 'setSessionStatus',
+        'arguments': {
+            'status': "passed"
+        }
+    }
+    browserstack_executor = 'browserstack_executor: {}'.format(json.dumps(executor_object))
+    driver.execute_script(browserstack_executor)
 
     # Close the browser
     driver.quit()
