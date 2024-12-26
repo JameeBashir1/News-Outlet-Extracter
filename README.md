@@ -13,6 +13,11 @@
 `accessKey: YOUR_ACCESS_KEY`
 ## Step 3 To Run the Tests on BrowserStack using the Pytest SDK
 `browserstack-sdk python NewsOutletScrapper.py`
+# WorkFlows
+### The project is seamlessly integrated with GitHub Actions, enabling automated workflows that streamline processes such as testing, deployment, and more. These workflows are triggered by events like code pushes, pull requests, or manual invocations. This integration ensures early detection of issues, maintains consistent quality standards, and accelerates the development cycle with reliable, automated processes.
+# Tested on BrowserStack
+[View ScreenShot](https://drive.google.com/file/d/1G6ogFDJYvDf0nOXel8VcKibPOLrh4-gO/view?usp=sharing)
+
 # To Run Locally 
 ## Step 1 Clone the Repository
 `https://github.com/JameeBashir1/News-Outlet-Scraper`

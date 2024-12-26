@@ -16,9 +16,7 @@ import html
 from time import sleep
 import json
 
-# Load environment variables from .env
-load_dotenv()
-API_KEY = os.getenv("GOOGLE_API_KEY")
+API_KEY = "AIzaSyAtMfGtiG-F1wxqtuEXd-2XPsEO7JLycd4" # Added here for easy testing
 
 # Google Translate API endpoint
 TRANSLATE_URL = "https://translation.googleapis.com/language/translate/v2"
